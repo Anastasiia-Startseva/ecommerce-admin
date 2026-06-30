@@ -1,16 +1,53 @@
+import { useState } from 'react';
 import PageHeader from '../components/ui/PageHeader';
 
-export default function Dashboard() {
-  const stats = [
-    { title: 'Продажи за месяц', value: '$12,450', change: '+12.4%', color: 'text-emerald-600', accent: 'bg-emerald-50' },
-    { title: 'Новых клиентов', value: '145', change: '+8.1%', color: 'text-sky-600', accent: 'bg-sky-50' },
-    { title: 'Заказов в ожидании', value: '24', change: '4 новых', color: 'text-amber-600', accent: 'bg-amber-50' },
-  ];
+type RangeKey = 'today' | 'week' | 'month';
 
-  const recentActivity = [
-    { title: 'Новый заказ #1248', detail: 'Покупатель оформил заказ на 2 товара', time: '5 мин назад' },
-    { title: 'Товар обновлён', detail: 'MacBook Pro получил новую цену', time: '18 мин назад' },
-    { title: 'Запрос клиента', detail: 'Новый отзыв по доставке', time: '1 час назад' },
+export default function Dashboard() {
+  const [selectedRange, setSelectedRange] = useState<RangeKey>('week');
+
+  const statsByRange: Record<RangeKey, Array<{ title: string; value: string; change: string; color: string; accent: string }>> = {
+    today: [
+      { title: 'Продажи сегодня', value: '$1,240', change: '+5.2%', color: 'text-emerald-600', accent: 'bg-emerald-50' },
+      { title: 'Новых клиентов', value: '18', change: '+2.1%', color: 'text-sky-600', accent: 'bg-sky-50' },
+      { title: 'Заказов в ожидании', value: '6', change: '2 новых', color: 'text-amber-600', accent: 'bg-amber-50' },
+    ],
+    week: [
+      { title: 'Продажи за неделю', value: '$8,720', change: '+12.4%', color: 'text-emerald-600', accent: 'bg-emerald-50' },
+      { title: 'Новых клиентов', value: '87', change: '+8.1%', color: 'text-sky-600', accent: 'bg-sky-50' },
+      { title: 'Заказов в ожидании', value: '14', change: '4 новых', color: 'text-amber-600', accent: 'bg-amber-50' },
+    ],
+    month: [
+      { title: 'Продажи за месяц', value: '$12,450', change: '+18.3%', color: 'text-emerald-600', accent: 'bg-emerald-50' },
+      { title: 'Новых клиентов', value: '145', change: '+11.2%', color: 'text-sky-600', accent: 'bg-sky-50' },
+      { title: 'Заказов в ожидании', value: '24', change: '6 новых', color: 'text-amber-600', accent: 'bg-amber-50' },
+    ],
+  };
+
+  const activityByRange: Record<RangeKey, Array<{ title: string; detail: string; time: string }>> = {
+    today: [
+      { title: 'Новый заказ #1254', detail: 'Покупатель оформил заказ на 3 товара', time: '12 мин назад' },
+      { title: 'Товар обновлён', detail: 'AirPods Pro получили новую цену', time: '32 мин назад' },
+      { title: 'Запрос клиента', detail: 'Новый вопрос по доставке', time: '1 час назад' },
+    ],
+    week: [
+      { title: 'Новый заказ #1248', detail: 'Покупатель оформил заказ на 2 товара', time: '5 мин назад' },
+      { title: 'Товар обновлён', detail: 'MacBook Pro получил новую цену', time: '18 мин назад' },
+      { title: 'Запрос клиента', detail: 'Новый отзыв по доставке', time: '1 час назад' },
+    ],
+    month: [
+      { title: 'Пакет обновлений', detail: 'Сделано 8 новых публикаций в каталоге', time: '3 часа назад' },
+      { title: 'Снижение возвратов', detail: 'Возвраты снизились на 7% за месяц', time: '5 часов назад' },
+      { title: 'Новый сегмент', detail: 'Появился активный сегмент премиум-клиентов', time: '1 день назад' },
+    ],
+  };
+
+  const stats = statsByRange[selectedRange];
+  const recentActivity = activityByRange[selectedRange];
+  const rangeOptions: Array<{ key: RangeKey; label: string }> = [
+    { key: 'today', label: 'Сегодня' },
+    { key: 'week', label: 'Неделя' },
+    { key: 'month', label: 'Месяц' },
   ];
 
   return (
@@ -21,9 +58,26 @@ export default function Dashboard() {
         badge="Live demo"
       />
 
+      <div className="flex flex-wrap items-center gap-2">
+        {rangeOptions.map((option) => (
+          <button
+            key={option.key}
+            type="button"
+            onClick={() => setSelectedRange(option.key)}
+            className={`rounded-full px-3 py-1.5 text-sm font-medium transition-all duration-200 ${
+              selectedRange === option.key
+                ? 'bg-slate-900 text-white shadow-sm dark:bg-slate-100 dark:text-slate-900'
+                : 'bg-white text-slate-600 hover:bg-slate-100 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800'
+            }`}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         {stats.map((stat) => (
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-slate-700 dark:bg-slate-900">
+          <div key={stat.title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-slate-700 dark:bg-slate-900">
             <div className={`inline-flex rounded-xl p-2 ${stat.accent}`}>
               <div className={`h-2.5 w-2.5 rounded-full ${stat.color.replace('text-', 'bg-')}`} />
             </div>
