@@ -1,11 +1,13 @@
-// src/pages/Products.tsx
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
+import { Plus } from 'lucide-react';
+import PageHeader from '../components/ui/PageHeader';
 import { type Product } from '../types';
 
 const mockProducts: Product[] = [
   { id: '1', name: 'Ноутбук Apple MacBook Pro', price: 2000, stock: 15 },
   { id: '2', name: 'Беспроводные наушники', price: 150, stock: 100 },
+  { id: '3', name: 'Умные часы', price: 320, stock: 40 },
 ];
 
 export default function Products() {
@@ -27,8 +29,8 @@ export default function Products() {
       return product;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['products'] }); 
-      reset(); 
+      queryClient.invalidateQueries({ queryKey: ['products'] });
+      reset();
     },
   });
 
@@ -36,45 +38,63 @@ export default function Products() {
     addProductMutation.mutate(data);
   };
 
-  if (isLoading) return <div>Загрузка товаров...</div>;
+  if (isLoading) return <div className="rounded-2xl bg-white p-6 text-sm text-slate-500 shadow-sm">Загрузка товаров...</div>;
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Управление товарами</h1>
+      <PageHeader
+        title="Управление товарами"
+        description="Добавляйте новые позиции и отслеживайте остатки"
+        badge="CRUD demo"
+        action={
+          <button className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-700">
+            <Plus size={16} />
+            Новый товар
+          </button>
+        }
+      />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6 rounded-xl shadow-sm flex gap-4 items-end">
-        <div>
-          <label className="block text-sm text-gray-600 mb-1">Название</label>
-          <input {...register('name', { required: true })} className="border p-2 rounded-md w-64" placeholder="Введите название..." />
+      <form onSubmit={handleSubmit(onSubmit)} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="grid gap-4 md:grid-cols-[2fr_1fr_1fr_auto]">
+          <div>
+            <label className="mb-1 block text-sm text-slate-600">Название</label>
+            <input {...register('name', { required: true })} className="w-full rounded-xl border border-slate-200 px-3 py-2 outline-none focus:border-indigo-500" placeholder="Введите название..." />
+          </div>
+          <div>
+            <label className="mb-1 block text-sm text-slate-600">Цена ($)</label>
+            <input type="number" {...register('price', { required: true })} className="w-full rounded-xl border border-slate-200 px-3 py-2 outline-none focus:border-indigo-500" />
+          </div>
+          <div>
+            <label className="mb-1 block text-sm text-slate-600">Остаток (шт)</label>
+            <input type="number" {...register('stock', { required: true })} className="w-full rounded-xl border border-slate-200 px-3 py-2 outline-none focus:border-indigo-500" />
+          </div>
+          <button type="submit" className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-700">
+            Добавить
+          </button>
         </div>
-        <div>
-          <label className="block text-sm text-gray-600 mb-1">Цена ($)</label>
-          <input type="number" {...register('price', { required: true })} className="border p-2 rounded-md w-32" />
-        </div>
-        <div>
-          <label className="block text-sm text-gray-600 mb-1">Остаток (шт)</label>
-          <input type="number" {...register('stock', { required: true })} className="border p-2 rounded-md w-32" />
-        </div>
-        <button type="submit" className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
-          Добавить
-        </button>
       </form>
 
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-        <table className="w-full text-left border-collapse">
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <table className="w-full border-collapse text-left">
           <thead>
-            <tr className="bg-gray-50 border-b">
-              <th className="p-4 font-medium text-gray-600">Название</th>
-              <th className="p-4 font-medium text-gray-600">Цена</th>
-              <th className="p-4 font-medium text-gray-600">Остаток на складе</th>
+            <tr className="border-b border-slate-200 bg-slate-50">
+              <th className="p-4 font-medium text-slate-600">Название</th>
+              <th className="p-4 font-medium text-slate-600">Цена</th>
+              <th className="p-4 font-medium text-slate-600">Остаток</th>
+              <th className="p-4 font-medium text-slate-600">Статус</th>
             </tr>
           </thead>
           <tbody>
             {products?.map((p) => (
-              <tr key={p.id} className="border-b last:border-0 hover:bg-gray-50">
-                <td className="p-4">{p.name}</td>
-                <td className="p-4">${p.price}</td>
-                <td className="p-4">{p.stock} шт.</td>
+              <tr key={p.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
+                <td className="p-4 font-medium text-slate-800">{p.name}</td>
+                <td className="p-4 text-slate-600">${p.price}</td>
+                <td className="p-4 text-slate-600">{p.stock} шт.</td>
+                <td className="p-4">
+                  <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${p.stock > 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}`}>
+                    {p.stock > 0 ? 'В наличии' : 'Нет в наличии'}
+                  </span>
+                </td>
               </tr>
             ))}
           </tbody>
