@@ -1,16 +1,19 @@
-
 import { Routes, Route } from 'react-router-dom';
+import AdminLayout from './layouts/AdminLayout';
+import Dashboard from './pages/Dashboard';
+import Products from './pages/Products';
+import Orders from './pages/Orders';
+import Customers from './pages/Customers';
 
-function App() {
+export default function App() {
   return (
     <Routes>
-      {/*заглушки */}
-      <Route path="/" element={<div className="p-10 text-2xl font-bold">Главная (Дашборд)</div>} />
-      <Route path="/products" element={<div className="p-10 text-2xl font-bold">Товары</div>} />
-      <Route path="/orders" element={<div className="p-10 text-2xl font-bold">Заказы</div>} />
-      <Route path="/customers" element={<div className="p-10 text-2xl font-bold">Клиенты</div>} />
+      <Route element={<AdminLayout />}>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/orders" element={<Orders />} />
+        <Route path="/customers" element={<Customers />} />
+      </Route>
     </Routes>
   );
 }
-
-export default App;
