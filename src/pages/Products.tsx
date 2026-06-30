@@ -54,19 +54,19 @@ export default function Products() {
         }
       />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <form onSubmit={handleSubmit(onSubmit)} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 dark:border-slate-700 dark:bg-slate-900">
         <div className="grid gap-4 md:grid-cols-[2fr_1fr_1fr_auto]">
           <div>
-            <label className="mb-1 block text-sm text-slate-600">Название</label>
-            <input {...register('name', { required: true })} className="w-full rounded-xl border border-slate-200 px-3 py-2 outline-none focus:border-indigo-500" placeholder="Введите название..." />
+            <label className="mb-1 block text-sm text-slate-600 dark:text-slate-400">Название</label>
+            <input {...register('name', { required: true })} className="w-full rounded-xl border border-slate-200 px-3 py-2 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" placeholder="Введите название..." />
           </div>
           <div>
-            <label className="mb-1 block text-sm text-slate-600">Цена ($)</label>
-            <input type="number" {...register('price', { required: true })} className="w-full rounded-xl border border-slate-200 px-3 py-2 outline-none focus:border-indigo-500" />
+            <label className="mb-1 block text-sm text-slate-600 dark:text-slate-400">Цена ($)</label>
+            <input type="number" {...register('price', { required: true })} className="w-full rounded-xl border border-slate-200 px-3 py-2 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" />
           </div>
           <div>
-            <label className="mb-1 block text-sm text-slate-600">Остаток (шт)</label>
-            <input type="number" {...register('stock', { required: true })} className="w-full rounded-xl border border-slate-200 px-3 py-2 outline-none focus:border-indigo-500" />
+            <label className="mb-1 block text-sm text-slate-600 dark:text-slate-400">Остаток (шт)</label>
+            <input type="number" {...register('stock', { required: true })} className="w-full rounded-xl border border-slate-200 px-3 py-2 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" />
           </div>
           <button type="submit" className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-700">
             Добавить
@@ -74,22 +74,22 @@ export default function Products() {
         </div>
       </form>
 
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 dark:border-slate-700 dark:bg-slate-900">
         <table className="w-full border-collapse text-left">
           <thead>
-            <tr className="border-b border-slate-200 bg-slate-50">
-              <th className="p-4 font-medium text-slate-600">Название</th>
-              <th className="p-4 font-medium text-slate-600">Цена</th>
-              <th className="p-4 font-medium text-slate-600">Остаток</th>
-              <th className="p-4 font-medium text-slate-600">Статус</th>
+            <tr className="border-b border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800">
+              <th className="p-4 font-medium text-slate-600 dark:text-slate-300">Название</th>
+              <th className="p-4 font-medium text-slate-600 dark:text-slate-300">Цена</th>
+              <th className="p-4 font-medium text-slate-600 dark:text-slate-300">Остаток</th>
+              <th className="p-4 font-medium text-slate-600 dark:text-slate-300">Статус</th>
             </tr>
           </thead>
           <tbody>
             {products?.map((p) => (
-              <tr key={p.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
-                <td className="p-4 font-medium text-slate-800">{p.name}</td>
-                <td className="p-4 text-slate-600">${p.price}</td>
-                <td className="p-4 text-slate-600">{p.stock} шт.</td>
+              <tr key={p.id} className="border-b border-slate-100 last:border-0 transition-colors duration-300 hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800">
+                <td className="p-4 font-medium text-slate-800 dark:text-slate-100">{p.name}</td>
+                <td className="p-4 text-slate-600 dark:text-slate-300">${p.price}</td>
+                <td className="p-4 text-slate-600 dark:text-slate-300">{p.stock} шт.</td>
                 <td className="p-4">
                   <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${p.stock > 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}`}>
                     {p.stock > 0 ? 'В наличии' : 'Нет в наличии'}

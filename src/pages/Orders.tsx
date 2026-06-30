@@ -16,22 +16,22 @@ export default function Orders() {
         badge="Order flow"
       />
 
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 dark:border-slate-700 dark:bg-slate-900">
         <table className="w-full text-left">
-          <thead className="border-b border-slate-200 bg-slate-50">
+          <thead className="border-b border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800">
             <tr>
-              <th className="p-4 font-medium text-slate-600">№ Заказа</th>
-              <th className="p-4 font-medium text-slate-600">Клиент</th>
-              <th className="p-4 font-medium text-slate-600">Сумма</th>
-              <th className="p-4 font-medium text-slate-600">Статус</th>
+              <th className="p-4 font-medium text-slate-600 dark:text-slate-300">№ Заказа</th>
+              <th className="p-4 font-medium text-slate-600 dark:text-slate-300">Клиент</th>
+              <th className="p-4 font-medium text-slate-600 dark:text-slate-300">Сумма</th>
+              <th className="p-4 font-medium text-slate-600 dark:text-slate-300">Статус</th>
             </tr>
           </thead>
           <tbody>
             {mockOrders.map((o) => (
-              <tr key={o.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
-                <td className="p-4 font-semibold text-slate-800">{o.id}</td>
-                <td className="p-4 text-slate-600">{o.customerName}</td>
-                <td className="p-4 text-slate-600">${o.total}</td>
+              <tr key={o.id} className="border-b border-slate-100 last:border-0 transition-colors duration-300 hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800">
+                <td className="p-4 font-semibold text-slate-800 dark:text-slate-100">{o.id}</td>
+                <td className="p-4 text-slate-600 dark:text-slate-300">{o.customerName}</td>
+                <td className="p-4 text-slate-600 dark:text-slate-300">${o.total}</td>
                 <td className="p-4">
                   <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${o.status === 'Выполнен' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
                     {o.status}
