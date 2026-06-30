@@ -17,4 +17,9 @@ export interface Customer {
   name: string;
   email: string;
   segment: string;
+  phone: string;
+  city: string;
+  totalSpent: number;
+  lastOrder: string;
+  loyaltyPoints: number;
 }
