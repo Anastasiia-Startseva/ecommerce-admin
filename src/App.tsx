@@ -1,9 +1,10 @@
 import { Routes, Route } from 'react-router-dom';
 import AdminLayout from './layouts/AdminLayout';
-import Dashboard from './pages/Dashboard';
-import Products from './pages/Products';
-import Orders from './pages/Orders';
 import Customers from './pages/Customers';
+import Dashboard from './pages/Dashboard';
+import Orders from './pages/Orders';
+import Products from './pages/Products';
+
 
 export default function App() {
   return (

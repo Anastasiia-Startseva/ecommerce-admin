@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-import { Plus } from 'lucide-react';
+import { Plus, Search } from 'lucide-react';
 import PageHeader from '../components/ui/PageHeader';
 import { type Product } from '../types';
 
@@ -11,6 +12,7 @@ const mockProducts: Product[] = [
 ];
 
 export default function Products() {
+  const [search, setSearch] = useState('');
   const queryClient = useQueryClient();
   const { register, handleSubmit, reset } = useForm<Omit<Product, 'id'>>();
 
@@ -55,6 +57,16 @@ export default function Products() {
       />
 
       <form onSubmit={handleSubmit(onSubmit)} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 dark:border-slate-700 dark:bg-slate-900">
+        <div className="mb-4 flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
+          <Search size={16} />
+          <input
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            className="w-full bg-transparent outline-none"
+            placeholder="Фильтр по товарам"
+          />
+        </div>
+
         <div className="grid gap-4 md:grid-cols-[2fr_1fr_1fr_auto]">
           <div>
             <label className="mb-1 block text-sm text-slate-600 dark:text-slate-400">Название</label>
@@ -85,7 +97,7 @@ export default function Products() {
             </tr>
           </thead>
           <tbody>
-            {products?.map((p) => (
+            {products?.filter((product) => product.name.toLowerCase().includes(search.toLowerCase())).map((p) => (
               <tr key={p.id} className="border-b border-slate-100 last:border-0 transition-colors duration-300 hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800">
                 <td className="p-4 font-medium text-slate-800 dark:text-slate-100">{p.name}</td>
                 <td className="p-4 text-slate-600 dark:text-slate-300">${p.price}</td>

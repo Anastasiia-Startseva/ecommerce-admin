@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import PageHeader from '../components/ui/PageHeader';
 import { type Order } from '../types';
 
@@ -8,6 +9,18 @@ const mockOrders: Order[] = [
 ];
 
 export default function Orders() {
+  const [orders, setOrders] = useState(mockOrders);
+
+  const handleStatusChange = (id: string) => {
+    setOrders((currentOrders) =>
+      currentOrders.map((order) =>
+        order.id === id
+          ? { ...order, status: order.status === 'Выполнен' ? 'Ожидает' : 'Выполнен' }
+          : order
+      )
+    );
+  };
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -27,15 +40,19 @@ export default function Orders() {
             </tr>
           </thead>
           <tbody>
-            {mockOrders.map((o) => (
+            {orders.map((o) => (
               <tr key={o.id} className="border-b border-slate-100 last:border-0 transition-colors duration-300 hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800">
                 <td className="p-4 font-semibold text-slate-800 dark:text-slate-100">{o.id}</td>
                 <td className="p-4 text-slate-600 dark:text-slate-300">{o.customerName}</td>
                 <td className="p-4 text-slate-600 dark:text-slate-300">${o.total}</td>
                 <td className="p-4">
-                  <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${o.status === 'Выполнен' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
+                  <button
+                    type="button"
+                    onClick={() => handleStatusChange(o.id)}
+                    className={`rounded-full px-2.5 py-1 text-xs font-medium transition hover:opacity-80 ${o.status === 'Выполнен' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}
+                  >
                     {o.status}
-                  </span>
+                  </button>
                 </td>
               </tr>
             ))}
